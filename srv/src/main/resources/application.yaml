@@ -1,0 +1,37 @@
+spring:
+  config.activate.on-profile: cloud
+cds:
+  messaging.services:
+    samples-messaging:
+      kind: enterprise-messaging
+---
+spring:
+  config.activate.on-profile: default
+  sql.init.platform: h2
+cds:
+  data-source.auto-config.enabled: false
+  security.mock.users:
+    alice:
+      roles: [ "admin" ]
+    bob:
+      roles: [ "user" ]
+  messaging.services:
+    samples-messaging:
+      kind: "file-based-messaging"
+      binding: "${user.dir}/../../cap.samples.java.messages.txt"
+server:
+  port: 8081
+---
+spring:
+  config.activate.on-profile: hybrid
+cds.security.authentication.authConfig.enabled: false
+cds:
+  messaging.services:
+    samples-messaging:
+      kind: enterprise-messaging
+  security:
+    mock:
+      enabled: true
+  indexPage.enabled: true
+server:
+  port: 8081
