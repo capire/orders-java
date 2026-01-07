@@ -62,7 +62,7 @@ public class OrdersHandler implements EventHandler {
         for(Orders.Items newItem : newItems) {
           if(oldItem.getId().equals(newItem.getId())) {
             if(oldItem.getProductId().equals(newItem.getProductId())) {
-              sendOrderChanged(oldItem.getProductId(), oldItem.getQuantity() - newItem.getQuantity());
+              sendOrderChanged(oldItem.getProductId(), newItem.getQuantity() - oldItem.getQuantity());
             } else {
               throw new ServiceException(ErrorStatuses.BAD_REQUEST, "ProductId was changed, "+oldItem.getProductId()+" != "+newItem.getProductId()).messageTarget("ProductId");
             }
@@ -81,7 +81,7 @@ public class OrdersHandler implements EventHandler {
       .single(Orders.class);
     List<Orders.Items> items = order.getItems();
     for(Orders.Items item : items) {
-      sendOrderChanged(item.getProductId(), item.getQuantity());
+      sendOrderChanged(item.getProductId(), -item.getQuantity());
     }
   }
 
