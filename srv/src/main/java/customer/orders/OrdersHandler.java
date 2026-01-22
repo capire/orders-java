@@ -49,27 +49,25 @@ public class OrdersHandler implements EventHandler {
   }
 
   @Before(event = CqnService.EVENT_UPDATE)
-  public void beforeUpdateOrders(EventContext context, Stream<Orders> orders) {
-    orders.forEach(order -> {
-      Orders oldOrder = service.run(Select
-        .from(OrdersService_.ORDERS)
-        .columns(o -> o._all(), o -> o.Items().expand())
-        .where(o -> o.ID().eq(order.getId())))
-        .single(Orders.class);
-      List<Orders.Items> oldItems = oldOrder.getItems();
-      for(Orders.Items oldItem : oldItems) {
-        List<Orders.Items> newItems = order.getItems();
-        for(Orders.Items newItem : newItems) {
-          if(oldItem.getId().equals(newItem.getId())) {
-            if(oldItem.getProductId().equals(newItem.getProductId())) {
-              sendOrderChanged(oldItem.getProductId(), newItem.getQuantity() - oldItem.getQuantity());
-            } else {
-              throw new ServiceException(ErrorStatuses.BAD_REQUEST, "ProductId was changed, "+oldItem.getProductId()+" != "+newItem.getProductId()).messageTarget("ProductId");
-            }
+  public void beforeUpdateOrders(EventContext context, Orders order) {
+    Orders oldOrder = service.run(Select
+      .from(OrdersService_.ORDERS)
+      .columns(o -> o._all(), o -> o.Items().expand())
+      .where(o -> o.ID().eq(order.getId())))
+      .single(Orders.class);
+    List<Orders.Items> oldItems = oldOrder.getItems();
+    for(Orders.Items oldItem : oldItems) {
+      List<Orders.Items> newItems = order.getItems();
+      for(Orders.Items newItem : newItems) {
+        if(oldItem.getId().equals(newItem.getId())) {
+          if(oldItem.getProductId().equals(newItem.getProductId())) {
+            sendOrderChanged(oldItem.getProductId(), newItem.getQuantity() - oldItem.getQuantity());
+          } else {
+            throw new ServiceException(ErrorStatuses.BAD_REQUEST, "ProductId was changed, "+oldItem.getProductId()+" != "+newItem.getProductId()).messageTarget("ProductId");
           }
         }
       }
-    });
+    }
   }
 
   @Before(event = CqnService.EVENT_DELETE, entity = Orders_.CDS_NAME)
