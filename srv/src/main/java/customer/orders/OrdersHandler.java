@@ -11,6 +11,7 @@ import com.sap.cds.CdsResult;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Select;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders;
+import cds.gen.sap.capire.orders.api.ordersservice.OrdersService;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders.Items;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders_;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders_.Items_;
@@ -19,7 +20,6 @@ import cds.gen.sap.capire.orders.api.ordersservice.OrderChangedContext;
 import cds.gen.sap.capire.orders.api.ordersservice.OrdersService_;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 import java.util.Map;
@@ -31,8 +31,7 @@ import java.util.stream.Collectors;
 public class OrdersHandler implements EventHandler {
 
   @Autowired
-  @Qualifier(OrdersService_.CDS_NAME)
-  CqnService service;
+  OrdersService service;
 
   @Before(event = CqnService.EVENT_UPDATE)
   public void beforeUpdateOrders(EventContext context, Orders order) {
