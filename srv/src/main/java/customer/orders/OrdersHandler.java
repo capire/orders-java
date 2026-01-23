@@ -1,11 +1,8 @@
 package customer.orders;
 
-import com.sap.cds.services.ServiceException;
-import com.sap.cds.services.ErrorStatuses;
 import com.sap.cds.services.cds.CqnService;
 import org.springframework.stereotype.Component;
 
-import com.sap.cds.services.cds.CdsDeleteEventContext;
 import com.sap.cds.services.EventContext;
 import com.sap.cds.services.handler.EventHandler;
 import com.sap.cds.services.handler.annotations.ServiceName;
@@ -13,10 +10,6 @@ import com.sap.cds.services.handler.annotations.Before;
 import com.sap.cds.CdsResult;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Select;
-import com.sap.cds.ql.cqn.CqnAnalyzer;
-import com.sap.cds.ql.cqn.CqnSelect;
-import com.sap.cds.reflect.CdsModel;
-
 import cds.gen.sap.capire.orders.api.ordersservice.Orders;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders.Items;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders_;
@@ -32,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @ServiceName(OrdersService_.CDS_NAME)
@@ -41,12 +33,6 @@ public class OrdersHandler implements EventHandler {
   @Autowired
   @Qualifier(OrdersService_.CDS_NAME)
   CqnService service;
-
-  private final CqnAnalyzer analyzer;
-
-  public OrdersHandler(CdsModel model) {
-    this.analyzer = CqnAnalyzer.create(model);
-  }
 
   @Before(event = CqnService.EVENT_UPDATE)
   public void beforeUpdateOrders(EventContext context, Orders order) {
@@ -69,15 +55,12 @@ public class OrdersHandler implements EventHandler {
     }
   }
 
-  @Before(event = CqnService.EVENT_DELETE, entity = Orders_.CDS_NAME)
-  public void beforeDeleteOrders(CdsDeleteEventContext context) {
-    String orderId = (String) analyzer.analyze(context.getCqn()).targetKeys().get(Orders.ID);
-    Orders order = service.run(Select.from(OrdersService_.ORDERS)
-      .columns(o -> o._all(), o -> o.Items().expand())
-      .where(o -> o.ID().eq(orderId)))
-      .single(Orders.class);
-    List<Orders.Items> items = order.getItems();
-    for(Orders.Items item : items) {
+  @Before(event = CqnService.EVENT_DELETE)
+  public void beforeDeleteOrders(Orders_ ordersRef) {
+    List<Items> items = service.run(Select.from(ordersRef.Items())
+      .columns(i -> i.product_ID(), i -> i.quantity())).listOf(Items.class);
+
+    for(Items item : items) {
       sendOrderChanged(item.getProductId(), -item.getQuantity());
     }
   }
