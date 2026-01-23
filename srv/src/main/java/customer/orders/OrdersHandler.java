@@ -19,11 +19,9 @@ import com.sap.cds.reflect.CdsModel;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders;
 import cds.gen.sap.capire.orders.api.ordersservice.Orders_;
 import cds.gen.sap.capire.orders.api.ordersservice.OrderChanged;
-import cds.gen.sap.capire.orders.api.ordersservice.OrderChanged_;
+import cds.gen.sap.capire.orders.api.ordersservice.OrderChangedContext;
 import cds.gen.sap.capire.orders.api.ordersservice.OrdersService_;
 
-// messages
-import com.sap.cds.services.messaging.MessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -33,10 +31,6 @@ import java.util.stream.Stream;
 @Component
 @ServiceName(OrdersService_.CDS_NAME)
 public class OrdersHandler implements EventHandler {
-
-  @Autowired
-  @Qualifier("samples-messaging")
-  private MessagingService messagingService;
 
   @Autowired
   @Qualifier(OrdersService_.CDS_NAME)
@@ -84,10 +78,12 @@ public class OrdersHandler implements EventHandler {
   }
 
   private void sendOrderChanged(String product, Integer deltaQuantity) {
-    OrderChanged message = OrderChanged.create();
-    message.setProduct(product);
-    message.setDeltaQuantity(deltaQuantity);
-    messagingService.emit(OrderChanged_.CDS_NAME, message);
+    OrderChanged event = OrderChanged.create();
+    event.setProduct(product);
+    event.setDeltaQuantity(deltaQuantity);
+    OrderChangedContext message = OrderChangedContext.create();
+    message.setData(event);
+    service.emit(message);
   }
 
 }
