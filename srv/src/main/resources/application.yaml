@@ -24,14 +24,20 @@ server:
 ---
 spring:
   config.activate.on-profile: hybrid
-cds.security.authentication.authConfig.enabled: false
 cds:
   messaging.services:
     samples-messaging:
       kind: enterprise-messaging
   security:
+    xsuaa:
+      enabled: false
     mock:
       enabled: true
+      users:
+        alice:
+          roles: [ "admin" ]
+        bob:
+          roles: [ "user" ]
   indexPage.enabled: true
 server:
   port: 8081
