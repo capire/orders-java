@@ -8,7 +8,7 @@
 		"i18n": "i18n/i18n.properties",
 		"dataSources": {
 			"OrdersService": {
-				"uri": "/odata/v4/sap.capire.orders.api.OrdersService/",
+				"uri": "/odata/v4/OrdersService/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "4.0"
