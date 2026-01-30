@@ -10,14 +10,14 @@ import com.sap.cds.services.handler.annotations.Before;
 import com.sap.cds.CdsResult;
 import com.sap.cds.ql.CQL;
 import com.sap.cds.ql.Select;
-import cds.gen.sap.capire.orders.api.ordersservice.Orders;
-import cds.gen.sap.capire.orders.api.ordersservice.OrdersService;
-import cds.gen.sap.capire.orders.api.ordersservice.Orders.Items;
-import cds.gen.sap.capire.orders.api.ordersservice.Orders_;
-import cds.gen.sap.capire.orders.api.ordersservice.Orders_.Items_;
-import cds.gen.sap.capire.orders.api.ordersservice.OrderChanged;
-import cds.gen.sap.capire.orders.api.ordersservice.OrderChangedContext;
-import cds.gen.sap.capire.orders.api.ordersservice.OrdersService_;
+import cds.gen.ordersservice.Orders;
+import cds.gen.ordersservice.OrdersService;
+import cds.gen.ordersservice.Orders.Items;
+import cds.gen.ordersservice.Orders_;
+import cds.gen.ordersservice.Orders_.Items_;
+import cds.gen.ordersservice.OrderChanged;
+import cds.gen.ordersservice.OrderChangedContext;
+import cds.gen.ordersservice.OrdersService_;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
