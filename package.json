@@ -1,5 +1,5 @@
 {
-  "name": "@capire/orders-java",
+  "name": "@capire/orders",
   "version": "2.0.1",
   "description": "A generic reuse service for managing orders.",
   "repository": "https://github.com/capire/orders-java",
