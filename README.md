@@ -1,4 +1,4 @@
-# @capire/orders-java
+# @capire/orders
 
 This is a sample app which provides a generic reuse service for managing orders,
 and a corresponding Fiori UI. It is used in the [bookstore](../bookstore) sample.
