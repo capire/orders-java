@@ -6,6 +6,7 @@
 *.sqlite-shm
 schema*.sql
 default-env.json
+package-lock.json
 
 **/bin/
 **/target/
