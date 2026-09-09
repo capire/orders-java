@@ -7,8 +7,8 @@
     "@capire/common": "*"
   },
   "devDependencies": {
-    "@sap/cds": "^9",
-    "@sap/cds-dk": "^9"
+    "@sap/cds": "^10",
+    "@sap/cds-dk": "^10"
   },
   "cds": {
     "requires": {
