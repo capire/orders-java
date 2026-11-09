@@ -4,6 +4,8 @@ cds:
   messaging.services:
     samples-messaging:
       kind: enterprise-messaging
+      publishPrefix: "$namespace/"
+      subscribePrefix: "$namespace/"
 ---
 spring:
   config.activate.on-profile: default
@@ -33,6 +35,8 @@ cds:
   messaging.services:
     samples-messaging:
       kind: enterprise-messaging
+      publishPrefix: "$namespace/"
+      subscribePrefix: "$namespace/"
   security:
     xsuaa:
       enabled: false
